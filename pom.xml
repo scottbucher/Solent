@@ -90,7 +90,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>me.stqlth.birthdaybot.main.BirthdayBot
+                            <mainClass>me.stqlth.solent.main.Solent
                             </mainClass> <!-- You have to replace this with a path to your Krypto class like my.path.Krypto -->
                         </manifest>
                     </archive>
