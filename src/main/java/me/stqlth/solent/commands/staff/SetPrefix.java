@@ -9,6 +9,7 @@ import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
 
 import java.awt.*;
 
@@ -42,6 +43,9 @@ public class SetPrefix extends Command {
         }
 
         if (args.length != 2) {
+            try {
+                event.getMessage().delete().queue();
+            } catch (InsufficientPermissionException ignored) {}
             staffMessages.sendErrorMessagePrefix(channel, sender, event, getName());
             return;
         }

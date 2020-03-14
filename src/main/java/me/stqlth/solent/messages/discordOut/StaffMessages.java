@@ -22,14 +22,16 @@ public class StaffMessages {
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //Punishment Command Messages
 
-
-
-
-
-
-
-
-
+    public void sendErrorMessage(Guild guild, TextChannel channel, String command, String args) {
+        EmbedBuilder builder = new EmbedBuilder();
+        builder.setColor(Color.decode("#EA2027"))
+                .setDescription("You forgot some parameters, try using this format:" +
+                        "\nFormat: `" + getMessageInfo.getPrefix(guild) + command + " " + args + "`"
+                        + "\nExample usage: `" + getMessageInfo.getPrefix(guild) + "setVerifiedRole @Member`");
+        try {
+            channel.sendMessage(builder.build()).queue();
+        } catch (InsufficientPermissionException ignored) {}
+    }
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     public void setPrefix(TextChannel channel, String prefix) {
@@ -59,7 +61,7 @@ public class StaffMessages {
                 .setColor(Color.decode("#EA2027"))
                 .setDescription("Proper usage: " + getMessageInfo.getPrefix(g) + command + " <prefix>")
                 .appendDescription("\n<> = Required, [] = Optional")
-                .setFooter("© 2020 KryptoBot", botIcon);
+                .setFooter("© 2020 Solent", botIcon);
         channel.sendMessage(builder.build()).complete().delete().queueAfter(15, TimeUnit.SECONDS);
     }
 

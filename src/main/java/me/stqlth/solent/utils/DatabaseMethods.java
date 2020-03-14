@@ -42,7 +42,7 @@ public class DatabaseMethods {
 
 			ResultSet rs = statement.executeQuery("CALL GetVerifyChannel(" + guildSettingsId + ")");
 			rs.next();
-			return rs.getLong("BirthdayChannel");
+			return rs.getLong("VerifyChannel");
 
 		} catch (SQLException ex) {
 			debugMessages.sqlDebug(ex);
@@ -59,7 +59,7 @@ public class DatabaseMethods {
 
 			ResultSet rs = statement.executeQuery("CALL GetLogChannel(" + guildSettingsId + ")");
 			rs.next();
-			return rs.getLong("BirthdayChannel");
+			return rs.getLong("LogChannel");
 
 		} catch (SQLException ex) {
 			debugMessages.sqlDebug(ex);
@@ -76,7 +76,7 @@ public class DatabaseMethods {
 
 			ResultSet rs = statement.executeQuery("CALL GetVerifiedRole(" + guildSettingsId + ")");
 			rs.next();
-			return rs.getLong("TrustedRole");
+			return rs.getLong("VerifiedRole");
 
 		} catch (SQLException ex) {
 			debugMessages.sqlDebug(ex);
@@ -93,7 +93,7 @@ public class DatabaseMethods {
 
 			ResultSet rs = statement.executeQuery("CALL GetMutedRole(" + guildSettingsId + ")");
 			rs.next();
-			return rs.getLong("TrustedRole");
+			return rs.getLong("MutedRole");
 
 		} catch (SQLException ex) {
 			debugMessages.sqlDebug(ex);

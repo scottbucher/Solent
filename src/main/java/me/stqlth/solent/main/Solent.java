@@ -4,10 +4,14 @@ import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandClient;
 import com.jagrosh.jdautilities.command.CommandClientBuilder;
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
-import me.stqlth.solent.commands.staff.SetPrefix;
+import me.stqlth.solent.commands.staff.*;
 import me.stqlth.solent.config.SolentConfig;
+import me.stqlth.solent.events.GuildJoinLeave;
+import me.stqlth.solent.events.LogEvents;
+import me.stqlth.solent.events.ReactionAdd;
 import me.stqlth.solent.main.GuildSettings.SettingsManager;
 import me.stqlth.solent.messages.debug.DebugMessages;
+import me.stqlth.solent.messages.discordOut.LogMessages;
 import me.stqlth.solent.messages.discordOut.StaffMessages;
 import me.stqlth.solent.messages.getMethods.GetMessageInfo;
 import me.stqlth.solent.utils.DatabaseMethods;
@@ -60,8 +64,16 @@ public class Solent {
 		SettingsManager settingsManager = new SettingsManager(solentConfig, debugMessages);
 		DatabaseMethods databaseMethods = new DatabaseMethods(solentConfig, debugMessages);
 		StaffMessages staffMessages = new StaffMessages(getMessageInfo);
+		LogMessages logMessages = new LogMessages();
 
 		Command[] commands = new Command[]{
+				//SETUP
+				new CreateVerifyChannel(databaseMethods),
+				new CreateLogChannel(databaseMethods),
+				new SetVerifiedRole(databaseMethods, staffMessages),
+				new SetLogChannel(databaseMethods),
+
+
 				//CONFIG
 
 
@@ -77,6 +89,8 @@ public class Solent {
 
 		EventListener[] listeners = new EventListener[]{
 				waiter,
+				new GuildJoinLeave(solentConfig, debugMessages),
+				new ReactionAdd(databaseMethods)
 		};
 
 		// Start the shard manager
@@ -86,13 +100,14 @@ public class Solent {
 		try {
 			instance = startShardManager(solentConfig, client, listeners);
 			try {
-				Thread.sleep(1000 * 60);
+				Thread.sleep(1000 * 1);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
+			instance.addEventListener(new LogEvents(instance, logMessages, databaseMethods));
 			SetupDatabase(solentConfig, instance.getGuilds(), debugMessages);
 			try {
-				Thread.sleep(1000 * 30);
+				Thread.sleep(1000 * 1);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
@@ -117,9 +132,8 @@ public class Solent {
 				.useDefaultGame()
 				.useHelpBuilder(false)
 				.setOwnerId(solentConfig.getOwnerId())
-				.setActivity(Activity.listening("Happy Birthday"))
+				.setActivity(Activity.watching("over you..."))
 				.setStatus(OnlineStatus.ONLINE)
-				.setPrefix(solentConfig.getPrefix())
 				.setEmojis(SUCCESS_EMOJI, WARNING_EMOJI, ERROR_EMOJI)
 				.addCommands(commands);
 		return clientBuilder.build();
